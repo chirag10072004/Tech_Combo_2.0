@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+@theme {
+  /* Set Poppins as the default sans font */
+  --font-sans: "Poppins", sans-serif;
+  
+  /* Brand colors */
+  --color-primary-blue: #2563EB;
+  --color-dark-navy: #071329;
+  --color-light-gray: #F8FAFC;
+  
+  /* Custom Animations */
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-12px);
+    }
+  }
+  
+  @keyframes pulse-glow {
+    0%, 100% {
+      opacity: 0.2;
+    }
+    50% {
+      opacity: 0.4;
+    }
+  }
+  
+  --animate-float: float 5s ease-in-out infinite;
+  --animate-pulse-glow: pulse-glow 4s ease-in-out infinite;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #071329;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e3a8a;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2563EB;
+}
+
+/* Global utility classes & HTML styles */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #071329;
+  color: #ffffff;
+  overflow-x: hidden;
+}
+
+/* Soft shadow overlay and glow effects */
+.glow-effect {
+  position: relative;
+}
+
+.glow-effect::before {
+  content: "";
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  width: 120%;
+  height: 120%;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+  z-index: -1;
+  pointer-events: none;
+}
