@@ -16,19 +16,19 @@ export default defineConfig({
     }
   },
   build: {
-    chunkSizeWarningLimit: 1600,
+    chunkSizeWarningLimit: 5000,
     rollupOptions: {
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {
-            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom')) {
-              return 'vendor-react';
+            if (id.includes('react/') || id.includes('react-dom/') || id.includes('react-router-dom/')) {
+              return 'vendor-core';
             }
             if (id.includes('framer-motion')) {
-              return 'vendor-framer-motion';
+              return 'vendor-framer';
             }
-            if (id.includes('react-icons')) {
-              return 'vendor-icons';
+            if (id.includes('react-icons/fa') || id.includes('react-icons/fi')) {
+              return 'vendor-icons-fa-fi';
             }
             if (id.includes('swiper')) {
               return 'vendor-swiper';
@@ -39,4 +39,5 @@ export default defineConfig({
     }
   }
 })
+
 
