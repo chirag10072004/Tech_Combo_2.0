@@ -9,8 +9,14 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Initialize Resend client
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Helper to get Resend client safely
+const getResendClient = () => {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey || apiKey.trim() === '') {
+    throw new Error('RESEND_API_KEY is not configured in Vercel environment variables. Please add RESEND_API_KEY to Vercel Settings -> Environment Variables.');
+  }
+  return new Resend(apiKey);
+};
 
 // Middleware
 app.use(cors());
@@ -35,6 +41,7 @@ app.post(['/api/contact', '/contact'], async (req, res) => {
   }
 
   try {
+    const resend = getResendClient();
     const from = getSenderEmail();
     const adminEmail = getReceiverEmail();
     const senderName = `${firstName} ${lastName}`;
@@ -90,8 +97,9 @@ app.post(['/api/contact', '/contact'], async (req, res) => {
       throw new Error(adminEmailResult.error.message || 'Resend failed to send admin email');
     }
 
-    // 2. Send Auto-Reply to User (if enabled)
-    if (process.env.SEND_AUTO_REPLY !== 'false') {
+    // 2. Send Auto-Reply to User (if enabled and not on onboarding test domain)
+    const isTestDomain = from.includes('onboarding@resend.dev');
+    if (process.env.SEND_AUTO_REPLY !== 'false' && !isTestDomain) {
       try {
         const autoReplyResult = await resend.emails.send({
           from: `Tech Combo <${from}>`,
@@ -117,11 +125,13 @@ app.post(['/api/contact', '/contact'], async (req, res) => {
           `
         });
         if (autoReplyResult.error) {
-          console.warn('Auto-reply skipped (Resend test mode limitation):', autoReplyResult.error.message);
+          console.warn('Auto-reply skipped:', autoReplyResult.error.message);
         }
       } catch (autoReplyErr) {
         console.warn('Auto-reply note:', autoReplyErr.message);
       }
+    } else if (isTestDomain) {
+      console.log('Skipping auto-reply to user because onboarding@resend.dev test domain only sends to account owner.');
     }
 
     res.status(200).json({
@@ -153,6 +163,7 @@ app.post(['/api/career', '/career'], async (req, res) => {
   }
 
   try {
+    const resend = getResendClient();
     const from = getSenderEmail();
     const adminEmail = getReceiverEmail();
 
@@ -231,8 +242,9 @@ app.post(['/api/career', '/career'], async (req, res) => {
       throw new Error(adminEmailResult.error.message || 'Resend failed to send application email');
     }
 
-    // 2. Send Auto-Reply to Candidate (if enabled)
-    if (process.env.SEND_AUTO_REPLY !== 'false') {
+    // 2. Send Auto-Reply to Candidate (if enabled and not on onboarding test domain)
+    const isTestDomain = from.includes('onboarding@resend.dev');
+    if (process.env.SEND_AUTO_REPLY !== 'false' && !isTestDomain) {
       try {
         const autoReplyResult = await resend.emails.send({
           from: `Tech Combo Careers <${from}>`,
@@ -259,11 +271,13 @@ app.post(['/api/career', '/career'], async (req, res) => {
           `
         });
         if (autoReplyResult.error) {
-          console.warn('Candidate auto-reply skipped (Resend test mode limitation):', autoReplyResult.error.message);
+          console.warn('Candidate auto-reply skipped:', autoReplyResult.error.message);
         }
       } catch (autoReplyErr) {
         console.warn('Candidate auto-reply note:', autoReplyErr.message);
       }
+    } else if (isTestDomain) {
+      console.log('Skipping candidate auto-reply because onboarding@resend.dev test domain only sends to account owner.');
     }
 
     res.status(200).json({
