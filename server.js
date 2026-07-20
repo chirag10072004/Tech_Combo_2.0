@@ -9,8 +9,9 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Initialize Resend client
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Initialize Resend client with fallback for production environment variables
+const resendApiKey = process.env.RESEND_API_KEY || 're_CVvm9QBd_J3JyHBRHGg2h4BLkEoUp6zSR';
+const resend = new Resend(resendApiKey);
 
 // Middleware
 app.use(cors());
@@ -23,7 +24,7 @@ const getReceiverEmail = () => process.env.RECEIVER_EMAIL || 'chiragpardhi01@gma
 // -------------------------------------------------------------
 // POST /api/contact Route
 // -------------------------------------------------------------
-app.post('/api/contact', async (req, res) => {
+app.post(['/api/contact', '/contact'], async (req, res) => {
   const { firstName, lastName, email, phone, company, subject, message } = req.body;
 
   // Validation
@@ -141,7 +142,7 @@ app.post('/api/contact', async (req, res) => {
 // -------------------------------------------------------------
 // POST /api/career Route (With Resend Attachments)
 // -------------------------------------------------------------
-app.post('/api/career', async (req, res) => {
+app.post(['/api/career', '/career'], async (req, res) => {
   const { job, fullName, email, phone, experience, portfolio, message, resume, resumeName } = req.body;
 
   // Validation
@@ -281,7 +282,7 @@ app.post('/api/career', async (req, res) => {
 });
 
 // Health check endpoint
-app.get('/api/health', (req, res) => {
+app.get(['/api/health', '/health'], (req, res) => {
   res.status(200).json({ status: 'ok', message: 'Resend API Express server is running.' });
 });
 
