@@ -71,7 +71,7 @@ const ContactCTA = () => {
           </a>
 
           <a
-            href="mailto:chiragpardhi01@gmail.com"
+            href="mailto:info@techcombo.in"
             className="flex items-center justify-center space-x-2.5 bg-primary-blue text-white font-semibold px-6 py-3.5 rounded-2xl w-full sm:w-auto text-sm transition-all duration-300 hover:bg-blue-700 hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(37,99,235,0.3)] shadow-sm"
           >
             <FaEnvelope className="h-3.5 w-3.5" />

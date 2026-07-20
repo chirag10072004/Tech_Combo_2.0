@@ -39,6 +39,7 @@ const ContactForm = () => {
         body: JSON.stringify(formData)
       });
       const result = await response.json();
+
       if (response.ok && result.success) {
         setStatus({ type: 'success', message: 'Your message has been sent successfully!' })
         setFormData({
@@ -54,6 +55,7 @@ const ContactForm = () => {
         setStatus({ type: 'error', message: result.message || 'Something went wrong. Please try again.' })
       }
     } catch (err) {
+      console.error("Contact Form Error:", err);
       setStatus({ type: 'error', message: 'Network error. Please try again.' })
     }
   }

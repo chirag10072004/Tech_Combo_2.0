@@ -83,7 +83,7 @@ const CareerForm = ({ job, onClose }) => {
         alert(result.message || "Submission failed");
       }
     } catch (err) {
-      console.error("Error:", err);
+      console.error("Career Form Error:", err);
       alert("Network error. Please try again.");
     } finally {
       setIsSubmitting(false);
@@ -212,10 +212,10 @@ const CareerForm = ({ job, onClose }) => {
 
               </div>
 
-              {/* Portfolio / LinkedIn URL */}
+              {/* Portfolio / LinkedIn / Resume Link URL */}
               <div>
                 <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">
-                  Portfolio or LinkedIn Profile (Optional)
+                  Portfolio, LinkedIn, or Resume Drive Link (Recommended)
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
@@ -226,7 +226,7 @@ const CareerForm = ({ job, onClose }) => {
                     name="portfolio"
                     value={formData.portfolio}
                     onChange={handleInputChange}
-                    placeholder="https://linkedin.com/in/username"
+                    placeholder="https://drive.google.com/... or linkedin.com/in/..."
                     className="w-full border border-slate-200 rounded-xl py-3 pl-11 pr-4 outline-none focus:border-green-600 focus:ring-2 focus:ring-blue-100 text-slate-900 placeholder-slate-400 bg-white transition text-sm font-normal"
                   />
                 </div>
@@ -253,15 +253,14 @@ const CareerForm = ({ job, onClose }) => {
                 </div>
               </div>
 
-              {/* Custom Resume Upload */}
+              {/* Custom Resume Selection */}
               <div>
                 <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">
-                  Upload Resume *
+                  Resume File Details (Optional)
                 </label>
                 <div className="relative border-2 border-dashed border-slate-200 rounded-xl p-4 text-center hover:border-blue-500 hover:bg-blue-50/20 transition-all duration-200 group cursor-pointer">
                   <input
                     type="file"
-                    required
                     accept=".pdf,.doc,.docx"
                     onChange={handleFileChange}
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
