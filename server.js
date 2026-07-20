@@ -9,9 +9,8 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Initialize Resend client with fallback for production environment variables
-const resendApiKey = process.env.RESEND_API_KEY || 're_CVvm9QBd_J3JyHBRHGg2h4BLkEoUp6zSR';
-const resend = new Resend(resendApiKey);
+// Initialize Resend client
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Middleware
 app.use(cors());
